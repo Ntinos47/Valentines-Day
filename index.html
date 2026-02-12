@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Will You Be My Valentine?</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ff4d6d;
+            --bg-color: #ffb3c1;
+            --text-color: #590d22;
+            --btn-yes: #fff0f3;
+            --btn-yes-hover: #ffccd5;
+            --btn-no: #a4133c;
+            --heart-size: 20px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            touch-action: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            user-select: none;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 3.5rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            padding: 0 20px;
+            z-index: 10;
+            line-height: 1.2;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+        }
+
+        /* Wrapper to hold space for the No button so Yes doesn't jump */
+        .no-btn-wrapper {
+            width: 150px; /* Matches approx button width */
+            height: 60px; /* Matches approx button height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, background 0.3s;
+            -webkit-tap-highlight-color: transparent;
+            min-width: 120px;
+            white-space: nowrap;
+        }
+
+        #yesBtn {
+            background-color: var(--btn-yes);
+            color: var(--primary-color);
+        }
+
+        #yesBtn:hover {
+            background-color: var(--btn-yes-hover);
+            transform: scale(1.1);
+        }
+
+        #noBtn {
+            background-color: var(--btn-no);
+            color: white;
+            z-index: 100;
+        }
+
+        /* UPDATED: Increased to 0.8s for slower movement */
+        .smooth-move {
+            transition: top 0.8s ease, left 0.8s ease, transform 0.2s ease, background 0.3s !important;
+        }
+
+        #backBtn {
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            color: var(--text-color);
+            font-size: 1rem;
+            padding: 10px 30px;
+        }
+
+        #backBtn:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .message-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 20;
+        }
+
+        .message-text {
+            font-family: 'Pacifico';
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .gif-container img {
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            top: -10vh;
+            background: var(--primary-color);
+            width: var(--heart-size);
+            height: var(--heart-size);
+            transform: rotate(45deg);
+            animation: fall linear forwards;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            width: var(--heart-size);
+            height: var(--heart-size);
+            background: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .heart::before { top: -50%; left: 0; }
+        .heart::after { left: -50%; top: 0; }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(45deg); }
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2rem; }
+            button { padding: 12px 30px; font-size: 1rem; }
+            .message-text { font-size: 1.5rem; padding: 0 15px; }
+            .gif-container img { max-width: 80%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <h1>Will you be my Valentine? 💖</h1>
+        
+        <div class="buttons">
+            <button id="yesBtn">Yes 💕</button>
+            <div class="no-btn-wrapper">
+                <button id="noBtn">No 😢</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="message-container" id="successMessage">
+        <div class="message-text">
+            Yay! You made me the <br> happiest person on earth! ❤️<br>
+            I love you! 💖
+        </div>
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3R6bW1wZ3JtNHc0dG4zYm42eG5qN3R6Ym42eG5qN3R6bW1wZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26BRv0ThflsHCqDrG/giphy.gif" alt="Happy Cat">
+        </div>
+        <button id="backBtn">Go Back</button>
+    </div>
+
+    <script>
+        document.body.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+        const backBtn = document.getElementById("backBtn");
+        const mainContainer = document.getElementById("mainContainer");
+        const successMessage = document.getElementById("successMessage");
+
+        let hasMoved = false;
+        let heartInterval;
+        let textIndex = 0;
+
+        const noTexts = [
+            "Are you sure?",
+            "Really?",
+            "Think again!",
+            "Please?",
+            "Don't do this!",
+            "I'm going to cry...",
+            "You're breaking my heart 💔",
+            "Last chance!",
+            "Pretty please?",
+            "You have no choice! 💕"
+        ];
+
+        function moveButton() {
+            if (textIndex < noTexts.length) {
+                noBtn.innerText = noTexts[textIndex];
+                textIndex++;
+            } else {
+                textIndex = 0;
+                noBtn.innerText = noTexts[0];
+            }
+
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const btnRect = noBtn.getBoundingClientRect();
+            const btnWidth = btnRect.width;
+            const btnHeight = btnRect.height;
+            
+            const maxLeft = windowWidth - btnWidth - 20;
+            const maxTop = windowHeight - btnHeight - 20;
+
+            const randomLeft = Math.max(20, Math.floor(Math.random() * maxLeft));
+            const randomTop = Math.max(20, Math.floor(Math.random() * maxTop));
+
+            if (!hasMoved) {
+                const initialLeft = btnRect.left;
+                const initialTop = btnRect.top;
+
+                noBtn.style.left = initialLeft + "px";
+                noBtn.style.top = initialTop + "px";
+                noBtn.style.position = "fixed";
+                
+                hasMoved = true;
+
+                setTimeout(() => {
+                    noBtn.classList.add("smooth-move");
+                    noBtn.style.left = randomLeft + "px";
+                    noBtn.style.top = randomTop + "px";
+                }, 10);
+
+            } else {
+                noBtn.style.left = randomLeft + "px";
+                noBtn.style.top = randomTop + "px";
+            }
+        }
+
+        noBtn.addEventListener("mouseover", moveButton);
+        noBtn.addEventListener("touchstart", (e) => {
+            e.preventDefault(); 
+            moveButton();
+        });
+        noBtn.addEventListener("click", moveButton);
+
+        yesBtn.addEventListener("click", () => {
+            mainContainer.style.display = "none";
+            successMessage.style.display = "flex";
+            heartInterval = setInterval(createHeart, 300);
+        });
+
+        backBtn.addEventListener("click", () => {
+            successMessage.style.display = "none";
+            mainContainer.style.display = "block";
+            
+            clearInterval(heartInterval);
+            
+            hasMoved = false;
+            textIndex = 0;
+            noBtn.innerText = "No 😢"; 
+            noBtn.classList.remove("smooth-move");
+            noBtn.style.position = "";
+            noBtn.style.top = "";
+            noBtn.style.left = "";
+        });
+
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.style.left = Math.random() * 100 + "vw";
+            const size = Math.random() * 10 + 15 + "px"; 
+            heart.style.setProperty('--heart-size', size);
+            heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 6000);
+        }
+
+        setInterval(createHeart, 1000);
+
+    </script>
+</body>
+</html>
